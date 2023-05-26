@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: mongodb
+  namespace: test-ns
+spec:
+   replicas: 1
+   selector:
+    matchLabels:
+      app: mongo
+   template:
+     metadata:
+       name: mongodbpod
+       labels:
+         app: mongo
+     spec:
+       containers:
+       - name: mongodbcontainer
+         image: mongo
+         ports:
+         - containerPort: 27017
+         env:
+         - name: MONGO_INITDB_ROOT_USERNAME
+           value: geetha
+         - name: MONGO_INITDB_ROOT_PASSWORD
+           value: geethapwd
+         volumeMounts:
+         - name: mongovol
+           mountPath: /data/db
+        volumes:
+        - name: mongovol
+          hostPath:
+            path: /mongo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongosvc
+spec:
+  type: ClusterIP
+  selector:
+    app: mongo
+  ports:
+  - port: 27017
+    targetPort: 27017
