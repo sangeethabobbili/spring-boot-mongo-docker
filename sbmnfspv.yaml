@@ -1,0 +1,14 @@
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfspv
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    server: 172.31.10.232
+    path: /mnt/nfs_share
+ubuntu@ip-172-31-12-242:~$ kubectl apply -f sbmnfspv.yaml
